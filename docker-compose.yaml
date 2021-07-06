@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: football-predictions
+      POSTGRES_PASSWORD: football-predictions
+      POSTGRES_DB: football-predictions
+    ports: [5432]
