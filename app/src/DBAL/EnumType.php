@@ -6,9 +6,9 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 abstract class EnumType extends Type
 {
-    protected $name;
-    protected $values = array();
-    protected $default = '';
+    protected string $name = '';
+    protected array $values = array();
+    protected string $default = '';
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
@@ -22,9 +22,6 @@ abstract class EnumType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!in_array($value, $this->values)) {
-            throw new \InvalidArgumentException("Invalid '".$this->name."' value.");
-        }
         return $value;
     }
 

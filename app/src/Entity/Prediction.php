@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Validator\Constraints\StatusTypeInterface;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,12 +10,15 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PredictionRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Validator\Constraints\MarketType as MarketTypeConstraint;
+use App\Validator\Constraints\Prediction as PredictionConstraint;
+use App\Validator\Constraints\Status as StatusConstraint;
 
 /**
  * @ORM\Entity(repositoryClass=PredictionRepository::class)
  *
  *  @ApiResource(
- *     attributes={"route_prefix"="/v1"},
+ *     attributes={"route_prefix"="/v1", "pagination_enabled"=false},
  *     normalizationContext={"groups"={"read"}},
  *     denormalizationContext={"groups"={"write"}},
  *     collectionOperations={"get", "post"},
@@ -27,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  *     }
  * )
+ * @PredictionConstraint
  */
 class Prediction
 {
@@ -41,6 +46,7 @@ class Prediction
     /**
      *
      * @Assert\Type("int")
+     * @Assert\Positive
      * @ORM\Column(type="integer", options={"unsigned":true})
      * @Groups({"read", "write"})
      */
@@ -48,6 +54,7 @@ class Prediction
 
     /**
      * @Assert\NotBlank
+     * @MarketTypeConstraint
      * @ORM\Column(type="enum_market_type")
      * @Groups({"read", "write"})
      */
@@ -63,6 +70,7 @@ class Prediction
     /**
      * @Assert\NotBlank
      * @ORM\Column(type="enum_status", options={"default": "unresolved"})
+     * @StatusConstraint
      * @Groups({"read", "write", "write-status"})
      */
     private $status;
@@ -83,6 +91,7 @@ class Prediction
     {
         $this->setCreatedAt(new DateTimeImmutable());
         $this->setUpdatedAt(new DateTime());
+        $this->setStatus(StatusTypeInterface::UNRESOLVED);
     }
 
 
