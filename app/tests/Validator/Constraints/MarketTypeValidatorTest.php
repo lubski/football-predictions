@@ -17,6 +17,7 @@ class MarketTypeValidatorTest extends AbstractTesting
     {
         $this->constraint = $this->getMockBuilder(Constraint::class)->getMock();
         $this->possibleValues = $this->createMock(PossibleValues::class);
+        $this->possibleValues->method('getPossibleValues')->willReturn(['ONEXTWO' => '1x2', 'CORRECT_SCORE' => 'correct_score']);
         $this->marketTypeValidatorMock = $this->getMockBuilder(MarketTypeValidator::class)
             ->onlyMethods(['makeViolation'])
             ->setConstructorArgs([$this->possibleValues])
@@ -25,30 +26,25 @@ class MarketTypeValidatorTest extends AbstractTesting
 
     public function testValidateCorrectlyValue()
     {
-        $this->possibleValues->method('getPossibleValues')->willReturn(['ONEXTWO' => '1x2', 'CORRECT_SCORE' => 'correct_score']);
         $marketValidate = new MarketTypeValidator($this->possibleValues);
         $this->assertEquals(true, $marketValidate->validate("correct_score", $this->constraint));
     }
 
     public function testValidateEmptyValue()
     {
-        $this->possibleValues->method('getPossibleValues')->willReturn(['ONEXTWO' => '1x2', 'CORRECT_SCORE' => 'correct_score']);
         $marketValidate = new MarketTypeValidator($this->possibleValues);
         $this->assertEquals(false, $marketValidate->validate("", $this->constraint));
     }
 
-    public function testValidateNotStringValueValue()
+    public function testValidateNotStringValue()
     {
-        $this->possibleValues->method('getPossibleValues')->willReturn(['ONEXTWO' => '1x2', 'CORRECT_SCORE' => 'correct_score']);
         $marketValidate = new MarketTypeValidator($this->possibleValues);
         $this->expectException(\UnexpectedValueException::class);
         $marketValidate->validate([], $this->constraint);
     }
 
-    public function testValidateWrongValueValue()
+    public function testValidateWrongValue()
     {
-        $this->possibleValues->method('getPossibleValues')->willReturn(['ONEXTWO' => '1x2', 'CORRECT_SCORE' => 'correct_score']);
-        $this->marketTypeValidatorMock->expects($this->once())->method('makeViolation');
         $this->assertEquals(false, $this->marketTypeValidatorMock->validate("aaaa", $this->constraint));
     }
 }

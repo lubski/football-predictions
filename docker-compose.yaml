@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: football-predictions
       POSTGRES_DB: football-predictions
     ports:
-      - "5666:5432"
+      - 5432
     networks:
       - footbal-predictions
 
@@ -20,7 +20,7 @@ services:
     build:
       context: ./php
     ports:
-      - '9000:9000'
+      - 9000
     volumes:
       - ./app:/var/www/football-predictions
     depends_on:

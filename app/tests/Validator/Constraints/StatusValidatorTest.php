@@ -32,7 +32,7 @@ class StatusValidatorTest extends AbstractTesting
     public function testValidateEmptyValue()
     {
         $marketValidate = new StatusValidator($this->possibleValues);
-        $this->assertNull($marketValidate->validate("", $this->constraint));
+        $this->assertEquals(false, $marketValidate->validate("", $this->constraint));
     }
 
     public function testValidateNotStringValue()

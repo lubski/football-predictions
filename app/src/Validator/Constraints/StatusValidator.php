@@ -4,6 +4,7 @@
 namespace App\Validator\Constraints;
 
 
+use App\Filter\IsBlank;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -21,10 +22,10 @@ class StatusValidator extends ConstraintValidator
     /**
      * @inheritDoc
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): bool
     {
-        if (null === $value || '' === $value) {
-            return;
+        if(IsBlank::validate($value)) {
+            return false;
         }
 
         if (!is_string($value)) {
